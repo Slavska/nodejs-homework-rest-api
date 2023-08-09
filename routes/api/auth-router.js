@@ -6,19 +6,31 @@ import { validateBody } from "../../decorators/index.js";
 
 import usersSchemas from "../../schemas/users-schemas.js";
 
-import { authenticate } from "../../middlewares/index.js";
+import { authenticate, upload } from "../../middlewares/index.js";
 
 const userSignupValidate = validateBody(usersSchemas.userSignupSchema);
 const userSigninValidate = validateBody(usersSchemas.userSigninSchema);
 
 const authRouter = express.Router();
 
-authRouter.post("/signup", userSignupValidate, authController.signup);
+authRouter.post(
+  "/signup",
+  upload.single("avatar"),
+  userSignupValidate,
+  authController.signup
+);
 
 authRouter.post("/signin", userSigninValidate, authController.signin);
 
 authRouter.get("/current", authenticate, authController.getCurrent);
 
 authRouter.post("/signout", authenticate, authController.signout);
+
+authRouter.patch(
+  "/users/avatars",
+  authenticate,
+  upload.single("avatar"),
+  authController.changeAvatar
+);
 
 export default authRouter;
