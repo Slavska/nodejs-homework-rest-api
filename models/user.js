@@ -21,9 +21,6 @@ const userSchema = new Schema(
       minlength: 6,
       required: true,
     },
-    avatarURL: {
-      type: String,
-    },
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
